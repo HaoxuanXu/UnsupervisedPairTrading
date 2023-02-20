@@ -46,7 +46,8 @@ class TradingManager(Base, metaclass=Singleton):
             tradingClient=tradingClient,
             dataClient=dataClient,
             entryPercent=config.ENTRYPERCENT,
-            maxPositions=config.MAXIMUM_POSITIONS
+            maxPositions=config.MAXIMUM_POSITIONS,
+            minPositions=config.MINUMUM_POSITIONS
         )
         
     @property 
