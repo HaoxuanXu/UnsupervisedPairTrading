@@ -85,19 +85,19 @@ class TradingManager(Base, metaclass=Singleton):
                 ])
                 
         else:
-            tradingNum:int = len(tradingPairs)
+            tradingNum:int = self.maxPositions
             avgEntryAmount = availableCash / tradingNum
-            while tradingNum > self._getViableTradesNum(avgEntryAmount, tradingPairs) or tradingNum > self.maxPositions:
+            while self._getViableTradesNum(avgEntryAmount, tradingPairs) < 20:
                 tradingNum -= 1
                 avgEntryAmount = availableCash / tradingNum
                 
+            tradingNum:int = self._getViableTradesNum(avgEntryAmount, tradingPairs)
             if tradingNum < 20:
                 logger.warn(f"Too few available pairs enterable ({tradingNum} pairs), aborting entry...")
                 return (0, 0)
         
         if tradingNum > len(tradingPairs):
-            tradingNum = len(tradingPairs)
-            avgEntryAmount = availableCash / tradingNum 
+            tradingNum = len(tradingPairs) 
 
         return (tradingNum, avgEntryAmount)
                   

@@ -37,7 +37,7 @@ class AlpacaDataClient(Base, metaclass=Singleton):
             return True 
         return False 
     
-    @retry(max_retries=5, retry_delay=60, logger=logger)
+    @retry(max_retries=3, retry_delay=60, logger=logger)
     def getMonthly(self, symbol:str, num_months:int=60) -> pd.DataFrame:
         return self.dataClient.get_stock_bars(
             StockBarsRequest(
