@@ -14,6 +14,7 @@ def configLoader(configType:CONFIG_TYPE) -> Config:
             REFRESH_DATA=configDict["refresh_data"],
             OVERWRITE_FUNDAMENTALS=configDict["overwrite_fundamentals"],
             MAXIMUM_POSITIONS=configDict["maximum_positions"],
+            MINUMUM_POSITIONS=configDict["minimum_positions"],
             IS_PAPER=configDict["is_paper"]
         )
         

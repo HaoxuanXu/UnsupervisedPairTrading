@@ -5,6 +5,7 @@ from PairTrading.util.write import writeToJson, dumpRecentlyClosed, dumpTradingR
 from lib.patterns import Singleton, Base
 from PairTrading.trading.helper import PairInfoRetriever
 from authentication.auth import AlpacaAuth
+from config.model import Config
 
 from alpaca.trading.models import TradeAccount, Position, Order, Clock
 from alpaca.data.models import Quote
@@ -21,24 +22,31 @@ logger = logging.getLogger(__name__)
 
 class TradingManager(Base, metaclass=Singleton):
     
-    def __init__(self, tradingClient:AlpacaTradingClient, dataClient:AlpacaDataClient, entryPercent:float, maxPositions:int):
+    def __init__(
+        self, 
+        tradingClient:AlpacaTradingClient, 
+        dataClient:AlpacaDataClient, 
+        entryPercent:float, 
+        maxPositions:int,
+        minPositions:int):
         self.tradingClient:AlpacaTradingClient = tradingClient
         self.dataClient:AlpacaDataClient = dataClient
         self.pairInfoRetriever:PairInfoRetriever = PairInfoRetriever.create(tradingClient)
         self.entryPercent:float = entryPercent
         self.maxPositions:int = maxPositions
+        self.minPositions:int = minPositions
         self.openedPositions:dict[str, Position] = self.tradingClient.openedPositions
         self.clock:Clock = self.tradingClient.clock
         
     @classmethod
-    def create(cls, alpacaAuth:AlpacaAuth, entryPercent:float, maxPositions:int):
+    def create(cls, alpacaAuth:AlpacaAuth, config:Config):
         tradingClient:AlpacaTradingClient = AlpacaTradingClient.create(alpacaAuth)
         dataClient:AlpacaDataClient = AlpacaDataClient.create(alpacaAuth)
         return cls(
             tradingClient=tradingClient,
             dataClient=dataClient,
-            entryPercent=entryPercent,
-            maxPositions=maxPositions
+            entryPercent=config.ENTRYPERCENT,
+            maxPositions=config.MAXIMUM_POSITIONS
         )
         
     @property 
@@ -87,12 +95,12 @@ class TradingManager(Base, metaclass=Singleton):
         else:
             tradingNum:int = self.maxPositions
             avgEntryAmount = availableCash / tradingNum
-            while self._getViableTradesNum(avgEntryAmount, tradingPairs) < 20:
+            while self._getViableTradesNum(avgEntryAmount, tradingPairs) < self.minPositions:
                 tradingNum -= 1
                 avgEntryAmount = availableCash / tradingNum
                 
             tradingNum:int = self._getViableTradesNum(avgEntryAmount, tradingPairs)
-            if tradingNum < 20:
+            if tradingNum < self.minPositions:
                 logger.warn(f"Too few available pairs enterable ({tradingNum} pairs), aborting entry...")
                 return (0, 0)
         

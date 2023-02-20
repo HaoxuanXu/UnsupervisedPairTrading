@@ -12,7 +12,8 @@ class Config:
     REFRESH_DATA: bool 
     OVERWRITE_FUNDAMENTALS: bool 
     IS_PAPER: bool 
-    MAXIMUM_POSITIONS: int = 20
+    MAXIMUM_POSITIONS: int = 30
+    MINUMUM_POSITIONS: int = 20
     
     def __repr__(self):
         return str(asdict(self))

@@ -10,7 +10,7 @@ from config.configloader import configLoader
 from alpaca.trading.models import Order
 
 from train import getTrainAssign
-from config.model import CONFIG_TYPE
+from config.model import CONFIG_TYPE, Config
 import logging
 from pandas import DataFrame, read_csv
 from datetime import datetime, date
@@ -19,7 +19,7 @@ from tqdm import tqdm
 import sys
 
 
-config = configLoader(CONFIG_TYPE.PAIR_TRADING)
+config:Config = configLoader(CONFIG_TYPE.PAIR_TRADING)
 print(config)
 
 if __name__ == "__main__":   
@@ -51,7 +51,7 @@ if __name__ == "__main__":
     pairCreator:PairCreator = PairCreator.create(cluster, AlpacaDataClient.create(alpacaAuth))
     
     # initialize trading manager
-    manager = TradingManager.create(alpacaAuth, config.ENTRYPERCENT, maxPositions=config.MAXIMUM_POSITIONS)
+    manager = TradingManager.create(alpacaAuth, config=config)
     
     timeTillMarketOpens:int = manager.tradingClient.secondsTillMarketOpens  
     while not manager.tradingClient.clock.is_open:
