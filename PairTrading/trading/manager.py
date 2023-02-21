@@ -96,7 +96,7 @@ class TradingManager(Base, metaclass=Singleton):
         else:
             tradingNum:int = self.maxPositions
             avgEntryAmount = availableCash / tradingNum
-            while self._getViableTradesNum(avgEntryAmount, tradingPairs) < self.minPositions:
+            while self._getViableTradesNum(avgEntryAmount, tradingPairs) < self.minPositions <= tradingNum:
                 tradingNum -= 1
                 avgEntryAmount = availableCash / tradingNum
                 
