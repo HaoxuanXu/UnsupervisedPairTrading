@@ -197,7 +197,8 @@ class TradingManager(Base, metaclass=Singleton):
             if currProfit > tradingRecord[pair] or currProfit < -0.1:
                 res.append(pair)
             else:                 
-                if daysElapsed > 30 and (self.clock.next_close - self.clock.timestamp).total_seconds() <= 600:
+                if (daysElapsed > 30 and (self.clock.next_close - self.clock.timestamp).total_seconds() <= 600) or \
+                    (daysElapsed > 30 and currProfit > tradingRecord[pair] / 2):
                     res.append(pair)
                     
         if updateLogTime:
