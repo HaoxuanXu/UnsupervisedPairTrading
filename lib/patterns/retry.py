@@ -5,6 +5,7 @@ import logging
 def retry(max_retries=3, retry_delay=1, incremental_backoff=2, logger=None):
     def decorator(func):
         def wrapper(*args, **kwargs):
+            retry_delay = retry_delay
             retries = 0
             while retries < max_retries:
                 try:
