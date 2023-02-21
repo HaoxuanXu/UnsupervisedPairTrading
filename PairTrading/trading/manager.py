@@ -169,10 +169,10 @@ class TradingManager(Base, metaclass=Singleton):
                          
                          
     def _getCloseablePairs(self, openedPositions:dict[str, Position]) -> list[tuple]:
-        print(datetime.now())
+        print(datetime.now().replace(tzinfo=None))
         print(self.clock.timestamp.replace(tzinfo=None))
-        print((datetime.now() - self.clock.timestamp.replace(tzinfo=None)).seconds)
-        updateLogTime:bool = (datetime.now().replace(tzinfo=pytz.UTC) - self.clock.timestamp.replace(tzinfo=pytz.UTC)).seconds >= 60
+        print((datetime.now().replace(tzinfo=None) - self.clock.timestamp.replace(tzinfo=None)).seconds)
+        updateLogTime:bool = (datetime.now().replace(tzinfo=None) - self.clock.timestamp.replace(tzinfo=None)).seconds >= 60
         res:list[tuple] = []        
         openedPairs:dict[tuple, float] = self.tradingRecord     
         openedPairsPositions:dict[tuple, list] = self.pairInfoRetriever.getCurrentlyOpenedPairs(
