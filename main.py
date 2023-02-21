@@ -80,14 +80,16 @@ if __name__ == "__main__":
     while manager.tradingClient.clock.is_open:      
         
         clock = manager.tradingClient.clock
-        if (clock.next_close - clock.timestamp).total_seconds() <= 900:
+        if (clock.next_close - clock.timestamp).total_seconds() <= 300:
             newPairs:dict = pairCreator.getFinalPairs(trainDate)
             writeToJson(newPairs, "saveddata/pairs/pairs.json")
             logger.info("new pairs created") 
-            
+                     
             manager.openPositions()
             time.sleep(10)
-        closed:bool = manager.closePositions()
+            clock = manager.tradingClient.clock
+        if clock.is_open:
+            closed:bool = manager.closePositions()
         time.sleep(1)
 
         
