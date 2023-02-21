@@ -185,8 +185,8 @@ class TradingManager(Base, metaclass=Singleton):
         for pair, positions in openedPairsPositions.items():
             
             currProfit:float = (self._getLatestProfit(positions[0], True) + self._getLatestProfit(positions[1], False)) / 2
-            orderList:list[Order] = self.orderListCache[pair] if pair in self.orderListCache else self.tradingClient.getOrders(pair)
-            self.orderListCache[pair] = orderList 
+            ordersList:list[Order] = self.orderListCache[pair] if pair in self.orderListCache else self.tradingClient.getOrders(pair)
+            self.orderListCache[pair] = ordersList 
             daysElapsed:int = (date.today() - ordersList[0].submitted_at.date()).days
             
             if updateLogTime:
