@@ -64,7 +64,6 @@ class AlpacaDataClient(Base, metaclass=Singleton):
             )
         ).df 
         
-    @retry(max_retries=3, retry_delay=5, logger=logger)
     def getDaily(self, symbol:str, endDate:datetime = datetime.today()) -> pd.DataFrame:
         return self.dataClient.get_stock_bars(
             StockBarsRequest(
