@@ -211,7 +211,6 @@ class TradingManager(Base, metaclass=Singleton):
         closeablePairs:list[tuple] = self._getCloseablePairs(self.openedPositions)
         
         if not closeablePairs:
-            logger.info("no closeable pairs detected currently ...")
             return False
         
         tradingRecord:dict[tuple, float] = self.tradingRecord
