@@ -201,7 +201,7 @@ class TradingManager(Base, metaclass=Singleton):
             print()
             print("========================================================================")
             print()
-        self.clock:Clock = self.tradingClient.clock if updateLogTime else self.clock
+            self.clock:Clock = self.tradingClient.clock 
         return res 
     
     def closePositions(self) -> bool:        
