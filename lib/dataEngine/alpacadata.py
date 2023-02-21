@@ -110,8 +110,12 @@ class AlpacaDataClient(Base, metaclass=Singleton):
         )[symbol].close
         
     def getMarketCap(self, symbol:str) -> float:
-        df:pd.DataFrame = self.getDaily(symbol)
-        return (df["vwap"] * df["volume"]).mean()
+        try:
+            df:pd.DataFrame = self.getDaily(symbol)
+            return (df["vwap"] * df["volume"]).mean()
+        except Exception as e:
+            logger.debug(e)
+            return 0
         
     @retry(max_retries=3, retry_delay=60, incremental_backoff=2, logger=logger)
     def getLongDaily(self, symbol:str, endDate:datetime = datetime.today()) -> pd.DataFrame:
