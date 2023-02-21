@@ -37,6 +37,7 @@ class TradingManager(Base, metaclass=Singleton):
         self.maxPositions:int = maxPositions
         self.minPositions:int = minPositions
         self.openedPositions:dict[str, Position] = self.tradingClient.openedPositions
+        self.orderListCache:dict[str:list] = {}
         self.clock:Clock = self.tradingClient.clock
         
     @classmethod
@@ -169,9 +170,6 @@ class TradingManager(Base, metaclass=Singleton):
                          
                          
     def _getCloseablePairs(self, openedPositions:dict[str, Position]) -> list[tuple]:
-        print(datetime.now(self.clock.timestamp.tzinfo))
-        print(self.clock.timestamp)
-        print((datetime.now(self.clock.timestamp.tzinfo) - self.clock.timestamp).seconds)
         updateLogTime:bool = (datetime.now(self.clock.timestamp.tzinfo) - self.clock.timestamp).seconds >= 60
         res:list[tuple] = []        
         openedPairs:dict[tuple, float] = self.tradingRecord     
@@ -187,7 +185,8 @@ class TradingManager(Base, metaclass=Singleton):
         for pair, positions in openedPairsPositions.items():
             
             currProfit:float = (self._getLatestProfit(positions[0], True) + self._getLatestProfit(positions[1], False)) / 2
-            ordersList:list[Order] = self.tradingClient.getOrders(pair)
+            orderList:list[Order] = self.orderListCache[pair] if pair in self.orderListCache else self.tradingClient.getOrders(pair)
+            self.orderListCache[pair] = orderList 
             daysElapsed:int = (date.today() - ordersList[0].submitted_at.date()).days
             
             if updateLogTime:
