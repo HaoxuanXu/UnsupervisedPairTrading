@@ -12,6 +12,7 @@ from alpaca.data.models import Quote
 
 
 import os
+import pytz
 import logging
 import numpy as np 
 from datetime import date, datetime
@@ -168,7 +169,7 @@ class TradingManager(Base, metaclass=Singleton):
                          
                          
     def _getCloseablePairs(self, openedPositions:dict[str, Position]) -> list[tuple]:
-        updateLogTime:bool = abs((datetime.now() - self.clock.timestamp.replace(tzinfo=None)).total_seconds()) >= 60
+        updateLogTime:bool = abs((datetime.now().replace(tzinfo=pytz.utc) - self.clock.timestamp.replace(tzinfo=pytz.utc)).total_seconds()) >= 60
         res:list[tuple] = []        
         openedPairs:dict[tuple, float] = self.tradingRecord     
         openedPairsPositions:dict[tuple, list] = self.pairInfoRetriever.getCurrentlyOpenedPairs(
