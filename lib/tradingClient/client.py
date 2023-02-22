@@ -40,7 +40,7 @@ class AlpacaTradingClient(Base, metaclass=Singleton):
     def allTradableStocks(
         self, 
         exchanges:list = [AssetExchange.AMEX, AssetExchange.ARCA, AssetExchange.NYSE, AssetExchange.NASDAQ]) -> list[str]:
-        return [asset.symbol for asset in self._allStocks if asset.tradable and asset.fractionable and 
+        return [asset for asset in self._allStocks if asset.tradable and asset.fractionable and 
                 asset.exchange in exchanges]
     
     @property
@@ -66,7 +66,7 @@ class AlpacaTradingClient(Base, metaclass=Singleton):
     def getViableStocks(self) -> list[str]:
              
         recentlyClosed:dict[str, date] = getRecentlyClosed() if getRecentlyClosed() else {}
-        validAssets:list[str] = [asset.symbol for asset in self.allTradableStocks if (asset.fractionable==True and \
+        validAssets:list[str] = [asset.symbol for asset in self.allTradableStocks() if (asset.fractionable==True and \
                                             asset.shortable==True and \
                                             asset.easy_to_borrow==True and \
                                             asset.exchange in (AssetExchange.NYSE, AssetExchange.AMEX, AssetExchange.NASDAQ) and \

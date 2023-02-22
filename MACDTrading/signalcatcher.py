@@ -3,10 +3,15 @@ from ta.volatility import AverageTrueRange
 from lib.dataEngine import AlpacaDataClient
 from pandas import Series, DataFrame
 from datetime import datetime, date 
+from lib.patterns.retry import retry
+
 
 from dateutil.relativedelta import relativedelta
 from alpaca.trading.models import Position, Order
 import copy 
+import logging 
+
+logger = logging.getLogger(__name__)
 
 
 class SignalCatcher:
@@ -92,13 +97,10 @@ class SignalCatcher:
           
         try:
             dailyBars:Series = self.client.getLongDaily(symbol)
-            minuteBars = self.client.getMinutes(symbol).loc[symbol].loc[date.today().strftime("%Y-%m-%d")]
         except Exception as ex:
             print(f"{symbol}: {ex}")
             return False 
         
-        todayOpen:float = minuteBars.iloc[0]["open"]
-        latestClose:float = minuteBars.iloc[-1]["close"]
         
         macdCurr:Series = MACD(
             close=dailyBars["close"]
@@ -111,10 +113,10 @@ class SignalCatcher:
         
         return (
                 macdCurr.loc[date.today().strftime("%Y-%m-%d")][0] > 0 and 
-                (macdPrev.iloc[-31:] >= 0).sum() == 0 and 
-                latestClose > todayOpen 
+                (macdPrev.iloc[-31:] >= 0).sum() == 0  
             )
-        
+    
+    @retry(max_retries=3, retry_delay=60, logger=logger) 
     def canClose(self, symbol:str, position:Position, order:Order, secondsTillMarketClose:int)-> bool:
         closePrice:Series = self.client.getLongDaily(symbol)["close"]
         latestClose:float = self.client.getLatestQuote(symbol).bid_price  

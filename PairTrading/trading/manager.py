@@ -3,6 +3,7 @@ from lib.dataEngine import AlpacaDataClient
 from PairTrading.util.read import readFromJson, getRecentlyClosed, getTradingRecord, getPairsFromTrainingJson
 from PairTrading.util.write import writeToJson, dumpRecentlyClosed, dumpTradingRecord
 from lib.patterns import Singleton, Base
+from lib.patterns.retry import retry
 from PairTrading.trading.helper import PairInfoRetriever
 from authentication.auth import AlpacaAuth
 from config.model import Config
@@ -159,7 +160,7 @@ class TradingManager(Base, metaclass=Singleton):
             self.openedPositions = self.tradingClient.openedPositions
         
             
-        
+    @retry(max_retries=3, retry_delay=60, logger=logger)    
     def _getLatestProfit(self, position:Position, is_short:bool) -> float:        
         quote:Quote = self.dataClient.getLatestQuote(position.symbol)
         if is_short:

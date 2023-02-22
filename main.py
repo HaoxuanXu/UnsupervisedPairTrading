@@ -77,7 +77,7 @@ if __name__ == "__main__":
            
         
     # start trading
-    clock:Clock = manager.tradingClient.clock
+    clock = manager.tradingClient.clock
     while clock.is_open:            
         if (clock.next_close - clock.timestamp).total_seconds() <= 300:
             newPairs:dict = pairCreator.getFinalPairs(trainDate)
