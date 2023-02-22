@@ -3,9 +3,9 @@ from lib.tradingClient import AlpacaTradingClient
 from lib.patterns import Base, Singleton
 
 from alpaca.trading.models import Asset
+from alpaca.trading.enums import AssetExchange
 from alpaca.trading.requests import GetAssetsRequest
 
-from tqdm import tqdm
 
 class ETFs(Base, metaclass=Singleton):
 
@@ -21,15 +21,18 @@ class ETFs(Base, metaclass=Singleton):
             dataClient=dataClient
         )
         
-    def getAllCandidates(self) -> list[str]:
-        tradableStocksSymbols = [asset.symbol for asset in self.tradingClient.allTradableStocks]
-        res = []
-        for symbol in tqdm(tradableStocksSymbols, desc="filter for viable stocks"):
-            try:
-                if self.dataClient.getMarketCap(symbol) > 1_000_000:
-                    res.append(symbol)
-            except:
-                continue
+    
+    
+        
+    def getAllCandidates(self) -> dict[str, list]:
+        
+        res:dict[str, list] = {}
+        res["NASDAQ"] = [equity for equity in self.tradingClient.allTradableStocks(exchanges=[AssetExchange.NASDAQ])
+                            if self.dataClient.getMarketCap(equity) > 1_000_000]
+        res["ETF"] = [equity for equity in self.tradingClient.allTradableStocks(exchanges=[AssetExchange.ARCA]) 
+                      if self.dataClient.getMarketCap(equity) > 1_000_000]
+        res["NYSE_AMEX"] = [equity for equity in self.tradingClient.allTradableStocks(exchanges=[AssetExchange.NYSE, AssetExchange.AMEX])
+                            if self.dataClient.getMarketCap(equity) > 1_000_000]
                 
         return res 
         

@@ -198,6 +198,7 @@ class TradingManager(Base, metaclass=Singleton):
                 res.append(pair)
             else:                 
                 if (daysElapsed > 30 and (self.clock.next_close - self.clock.timestamp).total_seconds() <= 600) or \
+                    (daysElapsed == 30 and currProfit > tradingRecord[pair] * 2 / 3) or \
                     (daysElapsed > 30 and currProfit > tradingRecord[pair] / 3):
                     res.append(pair)
                     

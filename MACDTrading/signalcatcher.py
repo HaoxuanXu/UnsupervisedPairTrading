@@ -20,6 +20,32 @@ class SignalCatcher:
             dataClient=dataClient
         )
         
+    def isIndexUp(self) -> dict[str, bool]:
+        nasdaqLatest:float = self.client.getLastMinute("QQQ")
+        sp500Latest:float = self.client.getLastMinute("SPY")
+        diaLatest:float = self.client.getLastMinute("DIA")
+        
+        nasdaq21Sma:float = SMAIndicator(
+            close=self.client.getDaily("QQQ"), 
+            window=21).iloc[-1]
+        
+        sp50021Sma:float = SMAIndicator(
+            close=self.client.getDaily("SPY"), 
+            window=21).iloc[-1]
+        
+        dia21Sma:float = SMAIndicator(
+            close=self.client.getDaily("SPY"), 
+            window=21).iloc[-1]
+        
+        res = {}
+        res["NASDAQ"] = nasdaqLatest > nasdaq21Sma
+        res["SP500"] = sp500Latest > sp50021Sma
+        res["DIA"] = diaLatest > dia21Sma
+        
+        return res 
+        
+        
+        
     def _getFastSma(self, profitPercent:float, closePrice:Series) -> Series:
         fastSma:Series = None 
         

@@ -36,9 +36,12 @@ class AlpacaTradingClient(Base, metaclass=Singleton):
             raise AttributeError("the auth object is not for Alpaca client")
         return cls(auth=alpacaAuth)
     
-    @property
-    def allTradableStocks(self) -> list[str]:
-        return [asset for asset in self._allStocks if asset.tradable and asset.fractionable]
+
+    def allTradableStocks(
+        self, 
+        exchanges:list = [AssetExchange.AMEX, AssetExchange.ARCA, AssetExchange.NYSE, AssetExchange.NASDAQ]) -> list[str]:
+        return [asset.symbol for asset in self._allStocks if asset.tradable and asset.fractionable and 
+                asset.exchange in exchanges]
     
     @property
     def clock(self) -> Clock:
