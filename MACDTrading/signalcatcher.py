@@ -26,16 +26,16 @@ class SignalCatcher:
         diaLatest:float = self.client.getLastMinute("DIA")
         
         nasdaq21Sma:float = SMAIndicator(
-            close=self.client.getDaily("QQQ"), 
-            window=21).iloc[-1]
+            close=self.client.getDaily("QQQ")["close"], 
+            window=21).sma_indicator().iloc[-1]
         
         sp50021Sma:float = SMAIndicator(
-            close=self.client.getDaily("SPY"), 
-            window=21).iloc[-1]
+            close=self.client.getDaily("SPY")["close"], 
+            window=21).sma_indicator().iloc[-1]
         
         dia21Sma:float = SMAIndicator(
-            close=self.client.getDaily("SPY"), 
-            window=21).iloc[-1]
+            close=self.client.getDaily("DIA")["close"], 
+            window=21).sma_indicator().iloc[-1]
         
         res = {}
         res["NASDAQ"] = nasdaqLatest > nasdaq21Sma
