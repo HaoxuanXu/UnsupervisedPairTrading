@@ -24,7 +24,7 @@ args = parser.parse_args()
 
 config:Config = configLoader(configType=CONFIG_TYPE.MACD_TRADING)
 config.IS_PAPER = (args.live_or_paper.strip().lower() != "live") 
-print(config)
+logger.info(config)
 
 alpacaAuth:AlpacaAuth = getAuth("alpaca_side", config.IS_PAPER)
 dataClient:AlpacaDataClient = AlpacaDataClient.create(alpacaAuth)
@@ -35,7 +35,6 @@ manager:MACDManager = MACDManager.create(
     tradingClient=tradingClient, 
     entryPercent=config.ENTRYPERCENT)
 
-print(manager._getEnterableEquities())
 
 if __name__ == "__main__":
     openedPositions:dict[str, Position] = tradingClient.openedPositions
