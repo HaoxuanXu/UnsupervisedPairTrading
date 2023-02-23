@@ -79,7 +79,7 @@ if __name__ == "__main__":
     # start trading
     clock = manager.tradingClient.clock
     while clock.is_open:            
-        if (clock.next_close - clock.timestamp).total_seconds() <= 300:
+        if (clock.next_close - clock.timestamp).total_seconds() <= 500:
             newPairs:dict = pairCreator.getFinalPairs(trainDate)
             writeToJson(newPairs, "saveddata/pairs/pairs.json")
                      
