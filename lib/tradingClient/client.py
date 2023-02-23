@@ -85,16 +85,16 @@ class AlpacaTradingClient(Base, metaclass=Singleton):
         res:dict[str, Position] = {position.symbol:position for position in openPositions}
         return res
     
+    @retry(max_retries=3, retry_delay=60, incremental_backoff=3, logger=logger)
     def getOrders(self, symbols:tuple) -> list[Order]:
         
-        orders:list[Order] = self.client.get_orders(
+        return self.client.get_orders(
             GetOrdersRequest(
-                status="closed",
+                status=OrderStatus.FILLED,
                 symbols=list(symbols)
             )
         )
-        
-        return [order for order in orders if order.status == OrderStatus.FILLED]
+
         
     @retry(max_retries=3, retry_delay=1, incremental_backoff=3, logger=logger)   
     def _submitTrade(self, stockSymbol:str, is_notional:bool, qty:float, side:OrderSide) -> Order:  

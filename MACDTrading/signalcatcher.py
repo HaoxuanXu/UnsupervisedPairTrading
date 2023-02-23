@@ -103,8 +103,8 @@ class SignalCatcher:
         
         
         return (
-                (macd.iloc[-2:] > 0).any() and 
-                (macd.iloc[-31:-2] >= 0).sum() == 0  
+                (macd.iloc[-1:] > 0).any() and 
+                (macd.iloc[-31:-1] >= 0).sum() == 0  
             )
     
     @retry(max_retries=3, retry_delay=60, logger=logger) 
