@@ -196,7 +196,7 @@ class TradingManager(Base, metaclass=Singleton):
             elif daysElapsed == 31:
                 exitProfit *= (1/3)
             elif daysElapsed > 31:
-                exitProfit *= (1/5)
+                exitProfit *= (1/4)
                 
             if updateLogTime:
                 logger.info(
@@ -204,6 +204,8 @@ class TradingManager(Base, metaclass=Singleton):
                     )
             
             if currProfit > exitProfit or currProfit < -0.1:
+                res.append(pair)
+            elif (daysElapsed > 60 and (self.clock.next_close - self.clock.timestamp).total_seconds() <= 600):  
                 res.append(pair)
        
 
