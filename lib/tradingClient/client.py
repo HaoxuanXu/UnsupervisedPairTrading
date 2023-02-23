@@ -4,7 +4,7 @@ from PairTrading.util.read import getRecentlyClosed
 from lib.patterns import Singleton, Base 
 
 from alpaca.trading.client import TradingClient
-from alpaca.trading.enums import AssetClass, AssetExchange, AssetStatus, OrderSide, TimeInForce
+from alpaca.trading.enums import AssetClass, AssetExchange, AssetStatus, OrderSide, TimeInForce, OrderStatus
 from alpaca.trading.requests import GetAssetsRequest, MarketOrderRequest, GetOrdersRequest
 from alpaca.trading.models import Order, Position, TradeAccount, Asset, Clock
 
@@ -40,7 +40,7 @@ class AlpacaTradingClient(Base, metaclass=Singleton):
     def allTradableStocks(
         self, 
         exchanges:list = [AssetExchange.AMEX, AssetExchange.ARCA, AssetExchange.NYSE, AssetExchange.NASDAQ]) -> list[str]:
-        return [asset for asset in self._allStocks if asset.tradable and asset.fractionable and 
+        return [asset for asset in self._allStocks if asset.tradable and 
                 asset.exchange in exchanges]
     
     @property
@@ -87,16 +87,18 @@ class AlpacaTradingClient(Base, metaclass=Singleton):
     
     def getOrders(self, symbols:tuple) -> list[Order]:
         
-        return self.client.get_orders(
+        orders:list[Order] = self.client.get_orders(
             GetOrdersRequest(
                 status="closed",
                 symbols=list(symbols)
             )
         )
         
+        return [order for order in orders if order.status == OrderStatus.FILLED]
+        
     @retry(max_retries=3, retry_delay=1, incremental_backoff=3, logger=logger)   
-    def _submitTrade(self, stockSymbol:str, is_notational:bool, qty:float, side:OrderSide) -> Order:  
-        if is_notational:
+    def _submitTrade(self, stockSymbol:str, is_notional:bool, qty:float, side:OrderSide) -> Order:  
+        if is_notional:
             return self.client.submit_order(order_data=MarketOrderRequest(
                     symbol=stockSymbol,
                     notional=qty,
@@ -122,7 +124,7 @@ class AlpacaTradingClient(Base, metaclass=Singleton):
         
         return self._submitTrade(
             stockSymbol=symbol, 
-            is_notational=True, 
+            is_notional=False, 
             qty=entryAmount, 
             side=OrderSide.BUY
             )
