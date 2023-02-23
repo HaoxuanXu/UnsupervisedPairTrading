@@ -190,18 +190,22 @@ class TradingManager(Base, metaclass=Singleton):
             self.orderListCache[pair] = ordersList 
             daysElapsed:int = (date.today() - ordersList[0].submitted_at.date()).days
             
+            exitProfit:float = tradingRecord[pair] 
+            if daysElapsed == 30:
+                exitProfit *= (2/3)
+            elif daysElapsed > 30:
+                exitProfit *= (1/3)
+                
             if updateLogTime:
                 logger.info(
-                    f"{pair[0]}--{pair[1]}, profit: {round(currProfit*100, 2)}%, days: {daysElapsed}, exit_profit: {round(tradingRecord[pair]*100, 2)}%"
+                    f"{pair[0]}--{pair[1]}, profit: {round(currProfit*100, 2)}%, days: {daysElapsed}, exit_profit: {round(exitProfit*100, 2)}%"
                     )
             
-            if currProfit > tradingRecord[pair] or currProfit < -0.1:
+            if currProfit > exitProfit or currProfit < -0.1:
                 res.append(pair)
-            else:                 
-                if (daysElapsed > 30 and (self.clock.next_close - self.clock.timestamp).total_seconds() <= 600) or \
-                    (daysElapsed == 30 and currProfit > tradingRecord[pair] * 2 / 3) or \
-                    (daysElapsed > 30 and currProfit > tradingRecord[pair] / 3):
-                    res.append(pair)
+            elif (daysElapsed > 30 and (self.clock.next_close - self.clock.timestamp).total_seconds() <= 600):  
+                res.append(pair)          
+
                     
         if updateLogTime:
             print()
