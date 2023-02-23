@@ -191,22 +191,21 @@ class TradingManager(Base, metaclass=Singleton):
             daysElapsed:int = (date.today() - ordersList[0].submitted_at.date()).days
             
             exitProfit:float = tradingRecord[pair] 
-            if daysElapsed == 30:
+            if 60 > daysElapsed >= 30:
                 exitProfit *= (2/3)
-            elif daysElapsed == 31:
+            elif 90 > daysElapsed >= 60:
                 exitProfit *= (1/3)
-            elif daysElapsed > 31:
-                exitProfit *= (1/4)
+            elif daysElapsed > 90:
+                exitProfit = 0.001
                 
             if updateLogTime:
                 logger.info(
                     f"{pair[0]}--{pair[1]}, profit: {round(currProfit*100, 2)}%, days: {daysElapsed}, exit_profit: {round(exitProfit*100, 2)}%"
                     )
             
-            if currProfit > exitProfit:
+            if currProfit > exitProfit or currProfit < -0.1:
                 res.append(pair)
-            elif (daysElapsed > 120 and (self.clock.next_close - self.clock.timestamp).total_seconds() <= 600):  
-                res.append(pair)
+
        
 
                     
