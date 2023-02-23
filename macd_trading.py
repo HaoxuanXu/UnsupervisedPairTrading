@@ -35,6 +35,7 @@ manager:MACDManager = MACDManager.create(
     tradingClient=tradingClient, 
     entryPercent=config.ENTRYPERCENT)
 
+print(manager._getEnterableEquities())
 
 if __name__ == "__main__":
     openedPositions:dict[str, Position] = tradingClient.openedPositions

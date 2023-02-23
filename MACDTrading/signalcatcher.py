@@ -59,25 +59,20 @@ class SignalCatcher:
             close=closePrice, 
             window=31
             ).sma_indicator()
-        elif 0.3 > profitPercent >= 0.2:
+        elif  0.4 > profitPercent >= 0.2:
             fastSma = SMAIndicator(
             close=closePrice, 
             window=26
             ).sma_indicator()
-        elif  0.4 > profitPercent >= 0.3:
+        elif 0.6 > profitPercent >= 0.4:
             fastSma = SMAIndicator(
             close=closePrice, 
             window=21
             ).sma_indicator()
-        elif 0.5 > profitPercent >= 0.4:
+        elif profit >= 0.6:
             fastSma = SMAIndicator(
             close=closePrice, 
             window=16
-            ).sma_indicator()
-        elif profit >= 0.5:
-            fastSma = SMAIndicator(
-            close=closePrice, 
-            window=11
             ).sma_indicator()
             
         return fastSma
@@ -102,18 +97,14 @@ class SignalCatcher:
             return False 
         
         
-        macdCurr:Series = MACD(
+        macd:Series = MACD(
             close=dailyBars["close"]
         ).macd().loc[symbol]
         
-        macdPrev:Series = copy.deepcopy(macdCurr)
-        while macdPrev.index[-1].date() >= date.today():
-            macdPrev = macdPrev.iloc[:-1]
-        
         
         return (
-                macdCurr.loc[date.today().strftime("%Y-%m-%d")][0] > 0 and 
-                (macdPrev.iloc[-31:] >= 0).sum() == 0  
+                (macd.iloc[-2:] > 0).any() and 
+                (macd.iloc[-31:-2] >= 0).sum() == 0  
             )
     
     @retry(max_retries=3, retry_delay=60, logger=logger) 
