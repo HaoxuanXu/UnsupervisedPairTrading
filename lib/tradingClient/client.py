@@ -88,12 +88,14 @@ class AlpacaTradingClient(Base, metaclass=Singleton):
     @retry(max_retries=3, retry_delay=60, incremental_backoff=3, logger=logger)
     def getOrders(self, symbols:tuple) -> list[Order]:
         
-        return self.client.get_orders(
+        orders = self.client.get_orders(
             GetOrdersRequest(
-                status=OrderStatus.FILLED,
+                status="closed",
                 symbols=list(symbols)
             )
         )
+        
+        return [order for order in orders if order.status == "filled"]
 
         
     @retry(max_retries=3, retry_delay=1, incremental_backoff=3, logger=logger)   
