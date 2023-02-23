@@ -74,7 +74,7 @@ class MACDManager(Base, metaclass=Singleton):
                 order = self.tradingClient.openMACDPosition(
                     symbol=stockCandidates[i], 
                     entryAmount=(availableCash/(20-len(openedPositions)))//self.dataClient.getLastMinute(stockCandidates[i]))
-                logger.info(f"{stockCandidates[i]} bought    ----   entered amount: ${round(float(order.notional), 2)}")
+                logger.info(f"{stockCandidates[i]} bought    ----   entered amount: ${round(float(order.qty), 2)}")
                 res.append(stockCandidates[i])
                 
         return res
