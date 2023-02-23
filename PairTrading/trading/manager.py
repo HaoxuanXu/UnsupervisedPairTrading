@@ -203,9 +203,9 @@ class TradingManager(Base, metaclass=Singleton):
                     f"{pair[0]}--{pair[1]}, profit: {round(currProfit*100, 2)}%, days: {daysElapsed}, exit_profit: {round(exitProfit*100, 2)}%"
                     )
             
-            if currProfit > exitProfit or currProfit < -0.1:
+            if currProfit > exitProfit:
                 res.append(pair)
-            elif (daysElapsed > 60 and (self.clock.next_close - self.clock.timestamp).total_seconds() <= 600):  
+            elif (daysElapsed > 120 and (self.clock.next_close - self.clock.timestamp).total_seconds() <= 600):  
                 res.append(pair)
        
 
