@@ -116,7 +116,7 @@ class TradingManager(Base, metaclass=Singleton):
     
     def openPositions(self) -> None:
         
-        if len(self.openedPositions) >= self.maxPositions:
+        if len(self.openedPositions)//2 >= self.maxPositions:
             logger.info(f"portfolio has reached maximum {self.maxPositions} positions ...")
             return 
         
