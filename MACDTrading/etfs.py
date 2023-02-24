@@ -29,8 +29,7 @@ class ETFs(Base, metaclass=Singleton):
         res:dict[str, list] = {}
         # res["NASDAQ"] = [equity.symbol for equity in self.tradingClient.allTradableStocks(exchanges=[AssetExchange.NASDAQ])
         #                     if self.dataClient.getMarketCap(equity.symbol) > 1_000_000]
-        res["ETF"] = [equity.symbol for equity in self.tradingClient.allTradableStocks(exchanges=[AssetExchange.ARCA]) 
-                      if self.dataClient.getMarketCap(equity.symbol) > 1_000_000]
+        res["ETF"] = [equity.symbol for equity in self.tradingClient.allTradableStocks(exchanges=[AssetExchange.ARCA])]
         
         res["NASDAQ"] = []
         res["NYSE_AMEX"] = []
