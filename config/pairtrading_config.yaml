@@ -1,6 +1,6 @@
-entry_percent: 1.6
+entry_percent: 2.0
 refresh_data: true
 overwrite_fundamentals: true
-maximum_positions: 35
+maximum_positions: 30
 minimum_positions: 20
 is_paper: false

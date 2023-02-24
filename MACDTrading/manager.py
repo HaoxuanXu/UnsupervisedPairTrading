@@ -23,7 +23,7 @@ class MACDManager(Base, metaclass=Singleton):
             tradingClient=self.tradingClient, 
             dataClient=self.dataClient)
         
-        self.candidates:dict[str, list] = self.etfs.getAllCandidates()
+        self.candidates:list = self.etfs.getAllCandidates()
         
     @classmethod
     def create(cls, dataClient:AlpacaDataClient, tradingClient:AlpacaTradingClient, entryPercent:float):
@@ -38,15 +38,8 @@ class MACDManager(Base, metaclass=Singleton):
         
         logger.info("start retrieving enterable equities ... ")
         start = time.perf_counter()
-        isIndexUp:dict[str, bool] = self.signalcatcher.isIndexUp()
-        candidates:list = self.candidates["ETF"]
-        
-        if isIndexUp["NASDAQ"]:
-            candidates += self.candidates["NASDAQ"]
-        if isIndexUp["SP500"] and isIndexUp["DIA"]:
-            candidates += self.candidates["NYSE_AMEX"]
                 
-        equities = list(Series({stock:self.signalcatcher.getATR(stock) for stock in candidates if stock not in openedPositions.keys() and 
+        equities = list(Series({stock:self.signalcatcher.getATR(stock) for stock in self.candidates if stock not in openedPositions.keys() and 
                     self.signalcatcher.canOpen(stock)}).sort_index(ascending=False).index)
         logger.info(f"retrieval complete. time taken: {round((time.perf_counter() - start)/60, 2)} minutes")
             
