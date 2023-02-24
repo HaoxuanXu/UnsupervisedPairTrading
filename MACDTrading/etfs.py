@@ -22,6 +22,6 @@ class ETFs(Base, metaclass=Singleton):
         )
         
     def getAllCandidates(self) -> dict[str, list]:      
-        return [equity.symbol for equity in self.tradingClient.allTradableStocks(exchanges=[AssetExchange.ARCA])]
+        return [equity.symbol for equity in self.tradingClient.allTradableStocks(exchanges=[AssetExchange.ARCA, AssetExchange.BATS])]
 
         
