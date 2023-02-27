@@ -230,8 +230,10 @@ class TradingManager(Base, metaclass=Singleton):
             order1, order2 = self.tradingClient.closeArbitragePositions(pair)
             tradesExecuted += 1
             del tradingRecord[pair]
-            recentlyClosed[order1.symbol] = order1.submitted_at.date()
-            recentlyClosed[order2.symbol] = order2.submitted_at.date()       
+            if self._getLatestProfit(order1.symbol, True) < 0:
+                recentlyClosed[order1.symbol] = order1.submitted_at.date()
+            if self._getLatestProfit(order2.symbol, False) < 0:
+                recentlyClosed[order2.symbol] = order2.submitted_at.date()       
             self.tradingRecord = tradingRecord
             self.pairInfoRetriever.recentlyClosedPositions = recentlyClosed      
 
