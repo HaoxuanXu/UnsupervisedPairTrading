@@ -34,7 +34,7 @@ class PairCreator(Base, metaclass=Singleton):
         
         tmpDict:dict = {}
         for pair in viablePairs:           
-            tmpDict[",".join(pair)] = (pairsDF.loc[",".join(pair)]["momentum"] - pairsDF.loc[",".join(pair)]["mean"]) * 1.5 / \
+            tmpDict[",".join(pair)] = (pairsDF.loc[",".join(pair)]["momentum"] - pairsDF.loc[",".join(pair)]["mean"]) / \
                 pairsDF.loc[",".join(pair)]["momentum_zscore"]
 
                 
