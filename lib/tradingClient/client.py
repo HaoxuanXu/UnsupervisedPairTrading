@@ -146,7 +146,7 @@ class AlpacaTradingClient(Base, metaclass=Singleton):
         # short the first stock
         shortOrder:Order = self._submitTrade(
             stockSymbol=stockPair[0], 
-            is_notational=False,
+            is_notional=False,
             qty=shortQty, 
             side=OrderSide.SELL)
         
@@ -157,7 +157,7 @@ class AlpacaTradingClient(Base, metaclass=Singleton):
         # long the second stock
         longOrder:Order = self._submitTrade(
             stockSymbol=stockPair[1], 
-            is_notational=True, 
+            is_notional=True, 
             qty=longNotional, 
             side=OrderSide.BUY)
 
