@@ -7,7 +7,6 @@
     "RBB,WTBA": 0.045,
     "FRO,INSW": 0.045,
     "IGIC,FPAC": 0.045,
-    "GDS,TME": 0.045,
     "FLIC,NFBK": 0.045,
     "SBSW,CMP": 0.045,
     "CNTY,PENN": 0.045,
@@ -18,7 +17,6 @@
     "GOOS,HBI": 0.045,
     "BSAC,CIB": 0.045,
     "AGI,BTG": 0.045,
-    "CMCM,BCH": 0.045,
     "ZTO,JD": 0.045,
     "PUMP,PTEN": 0.045,
     "OIS,CLB": 0.045,
@@ -30,5 +28,6 @@
     "IBTX,GLPG": 0.045,
     "GGAL,MMYT": 0.045,
     "FTS,BKH": 0.045,
-    "COHR,TRTN": 0.045
+    "COHR,TRTN": 0.045,
+    "TIGO,GFF": 0.05374974659573985
 }
