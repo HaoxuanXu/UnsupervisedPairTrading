@@ -93,7 +93,7 @@ class TradingManager(Base, metaclass=Singleton):
             tradingNum:int = min([
                 availableCash//avgEntryAmount, 
                 self._getViableTradesNum(avgEntryAmount, tradingPairs), 
-                self.maxPositions-len(openedPositions) if self.maxPositions-len(openedPositions) > 0 else 0
+                self.maxPositions-(len(openedPositions)//2) if self.maxPositions-(len(openedPositions)//2) > 0 else 0
                 ])
                 
         else:
