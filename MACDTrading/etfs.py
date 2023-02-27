@@ -23,6 +23,6 @@ class ETFs(Base, metaclass=Singleton):
         
     def getAllCandidates(self) -> dict[str, list]:      
         return [equity.symbol for equity in self.tradingClient.allTradableStocks(exchanges=[AssetExchange.ARCA, AssetExchange.BATS])
-                if self.dataClient.getMarketCap(equity.symbol) > 1_000_000]
+                if self.dataClient.getMarketCap(equity.symbol) > 500_000]
 
         
