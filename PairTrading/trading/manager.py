@@ -216,7 +216,8 @@ class TradingManager(Base, metaclass=Singleton):
             self.clock:Clock = self.tradingClient.clock 
         return res 
     
-    def closePositions(self) -> bool:        
+    def closePositions(self) -> bool:       
+         
         closeablePairs:list[tuple] = self._getCloseablePairs(self.openedPositions)
         
         if not closeablePairs:
@@ -230,10 +231,10 @@ class TradingManager(Base, metaclass=Singleton):
             order1, order2 = self.tradingClient.closeArbitragePositions(pair)
             tradesExecuted += 1
             del tradingRecord[pair]
-            if self._getLatestProfit(order1.symbol, True) < 0:
-                recentlyClosed[order1.symbol] = order1.submitted_at.date()
-            if self._getLatestProfit(order2.symbol, False) < 0:
-                recentlyClosed[order2.symbol] = order2.submitted_at.date()       
+            if self._getLatestProfit(self.openedPositions[pair[0]], True) < 0:
+                recentlyClosed[pair[0]] = order1.submitted_at.date()
+            if self._getLatestProfit(self.openedPositions[pair[1]], False) < 0:
+                recentlyClosed[pair[1]] = order2.submitted_at.date()       
             self.tradingRecord = tradingRecord
             self.pairInfoRetriever.recentlyClosedPositions = recentlyClosed      
 
