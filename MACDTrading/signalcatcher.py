@@ -96,5 +96,4 @@ class SignalCatcher:
         daysElapsed = (date.today() - order.submitted_at.date()).days      
         stopLoss:float = fastSma.iloc[-1]    
         
-        return (latestClose < stopLoss and secondsTillMarketClose < 600) or (daysElapsed <= 3 and profitPercent >= 0.15) or \
-            (daysElapsed <= 10 and profitPercent >= 0.3) or (daysElapsed <= 20 and profitPercent >= 0.4)
+        return (latestClose < stopLoss and secondsTillMarketClose < 600)
