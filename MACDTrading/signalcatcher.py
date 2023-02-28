@@ -77,6 +77,9 @@ class SignalCatcher:
             close=dailyBars["close"]
         ).macd().loc[symbol]
         
+        if macd.size < 31:
+            return False 
+        
         
         return (
                 (macd.iloc[-2:] > 0).any() and 
