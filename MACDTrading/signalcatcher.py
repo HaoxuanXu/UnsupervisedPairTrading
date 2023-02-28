@@ -34,22 +34,22 @@ class SignalCatcher:
             fastSma = SMAIndicator(
             close=closePrice, 
             window=31
-            ).sma_indicator()
+            ).sma_indicator().dropna()
         elif  0.4 > profitPercent >= 0.2:
             fastSma = SMAIndicator(
             close=closePrice, 
             window=26
-            ).sma_indicator()
+            ).sma_indicator().dropna()
         elif 0.6 > profitPercent >= 0.4:
             fastSma = SMAIndicator(
             close=closePrice, 
             window=21
-            ).sma_indicator()
+            ).sma_indicator().dropna()
         elif profit >= 0.6:
             fastSma = SMAIndicator(
             close=closePrice, 
             window=16
-            ).sma_indicator()
+            ).sma_indicator().dropna()
             
         return fastSma
         
