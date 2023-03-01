@@ -46,6 +46,7 @@ class SignalCatcher:
             window=21
             ).sma_indicator()
         
+        return fastSma 
         
     def getATR(self, symbol:str) -> float:
         priceDF = self.client.getDaily(symbol)
