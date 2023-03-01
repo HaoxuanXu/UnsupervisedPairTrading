@@ -75,6 +75,6 @@ class PairCreator(Base, metaclass=Singleton):
     def _getMomentum(self) -> None:
         for stock in tqdm(self.clusterDF.index, desc="get latest momentum data"):
             currPrice:float = self.dataClient.getLastMinute(stock)
-            prevPrice:float = self.dataClient.getMonthly(stock, 2).iloc[-2]["close"]            
+            prevPrice:float = self.dataClient.getMonthly(stock, 10).iloc[-2]["close"]            
             self.clusterDF.loc[stock]["momentum"] = (currPrice - prevPrice) / prevPrice
     
