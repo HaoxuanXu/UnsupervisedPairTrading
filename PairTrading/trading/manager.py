@@ -167,9 +167,19 @@ class TradingManager(Base, metaclass=Singleton):
             return (float(position.avg_entry_price) - quote.ask_price) / float(position.avg_entry_price)
         else:
             return (quote.bid_price - float(position.avg_entry_price)) / float(position.avg_entry_price)
+        
+        
+    def _getStopLoss(self, daysElapsed:int, originalExitProfit:float) -> float:
+        exitProfit:float = originalExitProfit
+        if 60 > daysElapsed >= 30:
+            exitProfit *= (2/3)
+        elif 90 > daysElapsed >= 60:
+            exitProfit *= (1/3)
+        elif daysElapsed > 90:
+            exitProfit = 0.001
+        return exitProfit
             
-                         
-                         
+                                              
     def _getCloseablePairs(self, openedPositions:dict[str, Position]) -> list[tuple]:
         updateLogTime:bool = (datetime.now(self.clock.timestamp.tzinfo) - self.clock.timestamp).seconds >= 60
         res:list[tuple] = []        
@@ -190,13 +200,7 @@ class TradingManager(Base, metaclass=Singleton):
             self.orderListCache[pair] = ordersList 
             daysElapsed:int = (date.today() - ordersList[0].submitted_at.date()).days
             
-            exitProfit:float = tradingRecord[pair] 
-            if 60 > daysElapsed >= 30:
-                exitProfit *= (2/3)
-            elif 90 > daysElapsed >= 60:
-                exitProfit *= (1/3)
-            elif daysElapsed > 90:
-                exitProfit = 0.001
+            exitProfit:float = self._getStopLoss(daysElapsed, tradingRecord[pair])
                 
             if updateLogTime:
                 logger.info(
