@@ -34,17 +34,17 @@ class SignalCatcher:
             fastSma = SMAIndicator(
             close=closePrice, 
             window=31
-            ).sma_indicator().dropna()
+            ).sma_indicator()
         elif  0.4 > profitPercent >= 0.2:
             fastSma = SMAIndicator(
             close=closePrice, 
             window=26
-            ).sma_indicator().dropna()
+            ).sma_indicator()
         elif profitPercent >= 0.4:
             fastSma = SMAIndicator(
             close=closePrice, 
             window=21
-            ).sma_indicator().dropna()
+            ).sma_indicator()
         
         
     def getATR(self, symbol:str) -> float:
@@ -68,7 +68,7 @@ class SignalCatcher:
         
         macd:Series = MACD(
             close=dailyBars["close"]
-        ).macd().loc[symbol]
+        ).macd().loc[symbol].dropna()
         
         if macd.size < 31:
             return False 
