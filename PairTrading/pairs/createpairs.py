@@ -33,9 +33,13 @@ class PairCreator(Base, metaclass=Singleton):
         meanMomentum:float = pairsDF["momentum"].mean()
         
         tmpDict:dict = {}
-        for pair in viablePairs:           
-            tmpDict[",".join(pair)] = (pairsDF.loc[",".join(pair)]["momentum"] - pairsDF.loc[",".join(pair)]["mean"]) / \
-                pairsDF.loc[",".join(pair)]["momentum_zscore"]
+        for pair in viablePairs:      
+            volumeRatio = self.dataClient.getLongDaily(pair[0]).values.reshape(-1, 1) / \
+                self.dataClient.getLongDaily(pair[0]).values.reshape(-1, 1)
+            ss = StandardScaler()
+            if abs(ss.fit_transform(volumeRatio)[-1][0]) < 2:
+                tmpDict[",".join(pair)] = (pairsDF.loc[",".join(pair)]["momentum"] - pairsDF.loc[",".join(pair)]["mean"]) / \
+                    pairsDF.loc[",".join(pair)]["momentum_zscore"]
 
                 
         for pair in list(tmpDict.keys()):
