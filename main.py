@@ -34,7 +34,7 @@ if __name__ == "__main__":
     eodAuth:EodAuth = getAuth("eod")
     # get recently trained final pairs data 
     pairsDict:dict = getPairsFromTrainingJson()
-    
+        
     todayTrained:bool = (date.today() - datetime.strptime(pairsDict["time"], "%Y-%m-%d").date()).days == 0
     if (date.today().day==2 and not todayTrained) or (config.REFRESH_DATA and not todayTrained):
         reason:str = "overdue for training" if (date.today().day==2 and not todayTrained) else "manual decision for new training"

@@ -5,7 +5,6 @@ from datetime import date, datetime
 from dateutil.relativedelta import relativedelta
 from lib.dataEngine import AlpacaDataClient
 from lib.patterns import Singleton, Base
-from PairTrading.pairs.cointegration import CointTest
 
 from tqdm import tqdm
 
@@ -29,9 +28,7 @@ class PairCreator(Base, metaclass=Singleton):
         finalPairs:dict = {}
         pairsDF:DataFrame = self._getTradeablePairs()
         viablePairs:list = [(val.split(",")[0], val.split(",")[1]) for val in pairsDF.index]
-        
-        meanMomentum:float = pairsDF["momentum"].mean()
-        
+                
         tmpDict:dict = {}
         for pair in viablePairs:      
             volumeRatio = self.dataClient.getLongDaily(pair[0]).values.reshape(-1, 1) / \
