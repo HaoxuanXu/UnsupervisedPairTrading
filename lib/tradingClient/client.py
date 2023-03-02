@@ -44,6 +44,7 @@ class AlpacaTradingClient(Base, metaclass=Singleton):
                 asset.exchange in exchanges]
     
     @property
+    @retry(max_retries=3, retry_delay=10, incremental_backoff=3, logger=logger)
     def clock(self) -> Clock:
         return self.client.get_clock()
     
