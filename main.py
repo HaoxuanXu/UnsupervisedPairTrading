@@ -61,9 +61,6 @@ if __name__ == "__main__":
         elif timeTillMarketOpens > 3600 * 8:
             logger.info("market is not open today")
             sys.exit()
-        else:
-            logger.info(f"anomaly... {round(timeTillMarketOpens/60, 2)} minutes before market opens")
-            time.sleep(300*60 + timeTillMarketOpens)
         timeTillMarketOpens:int = manager.tradingClient.secondsTillMarketOpens            
 
     logger.info("the market is currently open")
