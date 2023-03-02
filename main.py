@@ -81,7 +81,9 @@ if __name__ == "__main__":
             newPairs:dict = pairCreator.getFinalPairs(trainDate)
             writeToJson(newPairs, "saveddata/pairs/pairs.json")
                      
-            manager.openPositions()
+            clock = manager.tradingClient.clock
+            if clock.is_open:
+                manager.openPositions()
             time.sleep(10)
             clock = manager.tradingClient.clock
         if clock.is_open:
