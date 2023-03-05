@@ -1,4 +1,4 @@
-from lib.tradingClient.client import AlpacaTradingClient
+from lib.tradingClient import AlpacaTradingClient
 from PairTrading.util.read import getRecentlyClosed, getPairsFromTrainingJson
 from PairTrading.util.write import dumpRecentlyClosed
 from lib.patterns.singleton import Singleton

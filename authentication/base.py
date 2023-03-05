@@ -8,6 +8,9 @@ class BaseAuth(Base):
         self.api_key:str = api_key
         self.secret_key:str = secret_key if secret_key else ""
         self.isPaper:bool = isPaper
+        self.user_token:str = None 
+        self.account_id:str = None 
+        self.endpoint:str = None
         
     @classmethod
     def create(cls, rawDict:dict, isPaper:bool=True):

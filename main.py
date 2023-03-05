@@ -75,19 +75,21 @@ if __name__ == "__main__":
         
     # start trading
     clock = manager.tradingClient.clock
+    canOpen:bool = False
     while clock.is_open:            
         if (clock.next_close - clock.timestamp).total_seconds() <= 3600 * 4 and \
-            len(manager.openedPositions) < manager.maxPositions * 2:
+        len(manager.openedPositions) < manager.maxPositions * 2 and \
+        canOpen:
             newPairs:dict = pairCreator.getFinalPairs(trainDate)
-            writeToJson(newPairs, "saveddata/pairs/pairs.json")
-                     
+            writeToJson(newPairs, "saveddata/pairs/pairs.json")                     
             clock = manager.tradingClient.clock
             if clock.is_open:
                 manager.openPositions()
+                canOpen = False
             time.sleep(10)
             clock = manager.tradingClient.clock
         if clock.is_open:
-            closed:bool = manager.closePositions()
+            canOpen = manager.closePositions()
         time.sleep(1)
         clock = manager.tradingClient.clock
 
