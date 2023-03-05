@@ -84,8 +84,7 @@ if __name__ == "__main__":
             writeToJson(newPairs, "saveddata/pairs/pairs.json")                     
             clock = manager.tradingClient.clock
             if clock.is_open:
-                manager.openPositions()
-                canOpen = False
+                canOpen = manager.openPositions()
             time.sleep(10)
             clock = manager.tradingClient.clock
         if clock.is_open:

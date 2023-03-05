@@ -114,7 +114,7 @@ class TradingManager(Base, metaclass=Singleton):
         return (tradingNum, avgEntryAmount)
                   
     
-    def openPositions(self) -> None:
+    def openPositions(self) -> bool:
         
         if len(self.openedPositions)//2 >= self.maxPositions:
             logger.info(f"portfolio has reached maximum {self.maxPositions} positions ...")
@@ -126,7 +126,7 @@ class TradingManager(Base, metaclass=Singleton):
         )
         if not tradingPairs:
             logger.info("No trading pairs detected")
-            return
+            return False
        
         tradingAccount:TradeAccount = self.tradingClient.accountDetail
         totalPosition:float = sum([abs(float(p.cost_basis)) for p in self.openedPositions.values()])
@@ -139,7 +139,7 @@ class TradingManager(Base, metaclass=Singleton):
         tradeNums, notionalAmount = self._getOptimalTradingNum(tradingPairs, availableCash, self.openedPositions)          
         if tradeNums < 1:
             logger.info("No more trades can be placed currently")
-            return 
+            return False
             
         tradingRecord:dict[tuple, float] = self.tradingRecord
         pairsList:list[tuple] = list(tradingPairs.keys())
@@ -161,6 +161,9 @@ class TradingManager(Base, metaclass=Singleton):
             
         if executedTrades > 0:
             self.openedPositions = self.tradingClient.openedPositions
+            return True 
+        
+        return False
         
             
     @retry(max_retries=3, retry_delay=60, logger=logger)    
