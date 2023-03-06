@@ -89,7 +89,8 @@ if __name__ == "__main__":
             time.sleep(10)
             clock = manager.tradingClient.clock
         if clock.is_open:
-            canOpen = manager.closePositions()
+            canOpenNext:bool = manager.closePositions()
+            canOpen = True if canOpenNext else canOpen
         time.sleep(1)
         clock = manager.tradingClient.clock
 
