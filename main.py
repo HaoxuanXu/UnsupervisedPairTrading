@@ -76,7 +76,8 @@ if __name__ == "__main__":
     # start trading
     clock = manager.tradingClient.clock
     canOpen:bool = False
-    while clock.is_open:            
+    while clock.is_open:    
+        canOpen = True if (clock.next_close - clock.timestamp).total_seconds() < 300 else canOpen
         if (clock.next_close - clock.timestamp).total_seconds() <= 3600 * 4 and \
         len(manager.openedPositions) < manager.maxPositions * 2 and \
         canOpen:
