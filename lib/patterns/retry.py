@@ -16,6 +16,8 @@ def retry(max_retries=3, retry_delay=1, incremental_backoff=2, logger=None):
                         raise(e)
                     if logger:
                         logger.warning(f"Retryable error caught: {e}. Retrying...")
+                    else:
+                        print(f"Retryable error caught: {e}. Retrying...")
                     time.sleep(delay)
                     delay *= incremental_backoff
         return wrapper
