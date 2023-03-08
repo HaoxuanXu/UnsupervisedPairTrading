@@ -28,23 +28,10 @@ class SignalCatcher:
         
         
     def _getFastSma(self, profitPercent:float, closePrice:Series) -> Series:
-        fastSma:Series = None 
-        
-        if profitPercent < 0.2:
-            fastSma = SMAIndicator(
-            close=closePrice, 
-            window=31
-            ).sma_indicator()
-        elif  0.4 > profitPercent >= 0.2:
-            fastSma = SMAIndicator(
+        fastSma:Series = SMAIndicator(
             close=closePrice, 
             window=26
-            ).sma_indicator()
-        elif profitPercent >= 0.4:
-            fastSma = SMAIndicator(
-            close=closePrice, 
-            window=21
-            ).sma_indicator()
+            ).sma_indicator() 
         
         return fastSma 
         
