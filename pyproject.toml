@@ -19,6 +19,8 @@ pykalman = "^0.9.5"
 ta = "^0.10.2"
 baostock = "^0.8.8"
 gmtrade = "^3.0.4"
+aiohttp = "^3.8.4"
+asyncio = "^3.4.3"
 
 
 
