@@ -4,6 +4,7 @@ from PairTrading.data.fundamentals.util import *
 import pandas as pd
 import numpy as np
 import statsmodels.api as sm
+from datetime import datetime
 
 
 import warnings
@@ -260,6 +261,9 @@ class FirmCharGetter(FundamentalsBase):
         
         return dividends / marketCap
         
+    def getIPO(self) -> float:
+        ipoDate:datetime = datetime.strptime(self.general["IPODate"], "%Y-%m-%d")
+        return 1 if (datetime.today() - ipoDate).years < 1 else 0
     
     def getRd(self) -> float:
         """
