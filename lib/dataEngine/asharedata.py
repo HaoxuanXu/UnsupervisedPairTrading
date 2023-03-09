@@ -15,9 +15,7 @@ class AShareDataClient:
         URL=f'http://web.ifzq.gtimg.cn/appstock/app/fqkline/get?param={code},{unit},,{end_date},{count},qfq'     
         st= json.loads(requests.get(URL).content);    ms='qfq'+unit;      stk=st['data'][code]   
         buf=stk[ms] if ms in stk else stk[unit]       #指数返回不是qfqday,是day
-        df=pd.DataFrame(buf,columns=['time','open','close','high','low','volume'])     
-        df=df[['time','open','close','high','low','volume']]    
-        df[['open','close','high','low','volume']]=df[['open','close','high','low','volume']].astype('float')
+        df=pd.DataFrame(buf,columns=['time','open','close','high','low','volume']).astype('float')    
         df.time=pd.to_datetime(df.time);    df.set_index(['time'], inplace=True);   df.index.name=''          #处理索引 
         return df
     
