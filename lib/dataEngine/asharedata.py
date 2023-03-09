@@ -1,13 +1,18 @@
 import json 
 import datetime
 import requests
+from aiohttp.client import ClientSession
 import pandas as pd 
+from lib.patterns.base import Base 
+from lib.patterns.singleton  import Singleton
 
 
-class AShareDataClient:
+class AShareDataClient(Base, metaclass=Singleton):
+    
+    def __init__(self):
+        self.session = None 
     
     #腾讯日线
-    @staticmethod
     def get_price_day_tx(code, end_date='', count=10, frequency='1d'):     #日线获取  
         unit='week' if frequency in '1w' else 'month' if frequency in '1M' else 'day'     #判断日线，周线，月线
         if end_date:  end_date=end_date.strftime('%Y-%m-%d') if isinstance(end_date,datetime.date) else end_date.split(' ')[0]
@@ -45,7 +50,8 @@ class AShareDataClient:
         URL=f'http://money.finance.sina.com.cn/quotes_service/api/json_v2.php/CN_MarketData.getKLineData?symbol={code}&scale={ts}&ma=5&datalen={count}' 
         dstr= json.loads(requests.get(URL).content);       
         df= pd.DataFrame(dstr,columns=['day','open','high','low','close','volume', 'ma_price5', "ma_volume5"])  
-        df.day=pd.to_datetime(df.day);    df.set_index(['day'], inplace=True)               
+        df.day=pd.to_datetime(df.day)   
+        df.set_index(['day'], inplace=True)               
         if (end_date!='') & (frequency in ['240m','1200m','7200m']): 
             df = df[df.index<=end_date][-mcount:]   #日线带结束时间先返回              
         return pd.to_numeric(df["close"])
