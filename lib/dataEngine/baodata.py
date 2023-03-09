@@ -41,22 +41,22 @@ class BaoDataClient(Base, metaclass=Singleton):
             if row[0].split(".")[0] in ("sz", "sh") and row[0].split(".")[1][:2] in ("60", "30", "00") and row[1] == "1":
                 data_list.append(row[0])
                 
-        for symbol in tqdm(data_list, desc="total SH and SZ symbols"):
-            try:
-                if AShareDataClient.get_price(symbol.replace(".", ""), frequency="1d", count=10).mean() > 5:
-                    res.append(symbol)
-            except:
-                continue 
-        
-        return res 
-        
-        # with concurrent.futures.ThreadPoolExecutor() as executor:     
-        #     futures:dict = {}    
-        #     for symbol in data_list:
-        #         futures[symbol] = executor.submit(self._getDailyBarRaw, symbol=symbol)
-        #     for symbol in concurrent.futures.as_completed(futures):
-        #         if self._formatRawDailyBar(futures[symbol]).mean() > 5:
+        # for symbol in tqdm(data_list, desc="total SH and SZ symbols"):
+        #     try:
+        #         if AShareDataClient.get_price(symbol.replace(".", ""), frequency="1d", count=10).mean() > 5:
         #             res.append(symbol)
+        #     except:
+        #         continue 
+        
+        # return res 
+        
+        with concurrent.futures.ThreadPoolExecutor() as executor:     
+            futures:dict = {}    
+            for symbol in data_list:
+                futures[symbol] = executor.submit(AShareDataClient.get_price, code=symbol.replace(".", ""))
+            for symbol in concurrent.futures.as_completed(futures):
+                if self._formatRawDailyBar(futures[symbol]).mean() > 5:
+                    res.append(symbol)
             
         return res 
     
