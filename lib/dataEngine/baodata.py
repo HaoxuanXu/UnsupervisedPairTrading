@@ -10,6 +10,7 @@ import time
 import logging 
 from tqdm import tqdm
 import concurrent.futures
+from lib.dataEngine.asharedata import AShareDataClient
 
 
 logger = logging.getLogger(__name__)
@@ -34,14 +35,14 @@ class BaoDataClient(Base, metaclass=Singleton):
         specifiedDate:str = (today - relativedelta(days=today.day)).strftime("%Y-%m-%d")
         res:list = []
         rs = self.client.query_all_stock(day=specifiedDate)
-        data_list:list = []
+        data_list:list[str] = []
         while (rs.error_code == '0') & rs.next():
             row = rs.get_row_data()       
             if row[0].split(".")[0] in ("sz", "sh") and row[0].split(".")[1][:2] in ("60", "30", "00") and row[1] == "1":
                 data_list.append(row[0])
                 
         for symbol in tqdm(data_list, desc="total SH and SZ symbols"):
-            if self.getDailyBar(symbol).mean() > 5:
+            if AShareDataClient.get_price(symbol.replace(".", ""), frequency="1d", count=10)["close"].mean() > 5:
                 res.append(symbol)
         
         return res 
