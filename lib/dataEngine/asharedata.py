@@ -44,7 +44,6 @@ class AShareDataClient:
             count=count+(datetime.datetime.now()-end_date).days//unit            #结束时间到今天有多少天自然日(肯定 >交易日)            
         URL=f'http://money.finance.sina.com.cn/quotes_service/api/json_v2.php/CN_MarketData.getKLineData?symbol={code}&scale={ts}&ma=5&datalen={count}' 
         dstr= json.loads(requests.get(URL).content);       
-        print(dstr)
         df= pd.DataFrame(dstr,columns=['day','open','high','low','close','volume', 'ma_price5', "ma_volume5"])  
         df.day=pd.to_datetime(df.day);    df.set_index(['day'], inplace=True)               
         if (end_date!='') & (frequency in ['240m','1200m','7200m']): 
