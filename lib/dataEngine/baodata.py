@@ -42,7 +42,7 @@ class BaoDataClient(Base, metaclass=Singleton):
                 data_list.append(row[0])
                 
         for symbol in tqdm(data_list, desc="total SH and SZ symbols"):
-            if AShareDataClient.get_price(symbol.replace(".", ""), frequency="1d", count=10)["close"].mean() > 5:
+            if AShareDataClient.get_price(symbol.replace(".", ""), frequency="1d", count=10).mean() > 5:
                 res.append(symbol)
         
         return res 
