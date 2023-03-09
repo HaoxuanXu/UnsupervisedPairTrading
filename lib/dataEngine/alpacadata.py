@@ -118,7 +118,7 @@ class AlpacaDataClient(Base, metaclass=Singleton):
             return 0
         
     @retry(max_retries=3, retry_delay=60, incremental_backoff=2, logger=logger)
-    def getLongDaily(self, symbol:str, endDate:datetime = datetime.today()) -> pd.DataFrame:
+    def getLongDaily(self, symbol:str, endDate:datetime = datetime.today(), days:int=90) -> pd.DataFrame:
         return self.dataClient.get_stock_bars(
             StockBarsRequest(
                 symbol_or_symbols=symbol,
@@ -126,10 +126,25 @@ class AlpacaDataClient(Base, metaclass=Singleton):
                 adjustment=Adjustment.ALL,
                 feed=DataFeed.SIP,
                 limit=90,
-                start=endDate - relativedelta(days=90),
+                start=endDate - relativedelta(days=days),
                 end=endDate
             )
         ).df
+      
+    @retry(max_retries=3, retry_delay=60, incremental_backoff=2, logger=logger)
+    def get4YearDaily(self, symbol:str, endDate:datetime = datetime.today()) -> pd.DataFrame:
+        return self.dataClient.get_stock_bars(
+            StockBarsRequest(
+                symbol_or_symbols=symbol,
+                timeframe=TimeFrame.Day,
+                adjustment=Adjustment.ALL,
+                feed=DataFeed.SIP,
+                limit=90,
+                start=endDate - relativedelta(years=4),
+                end=endDate
+            )
+        ).df  
+    
         
     def getAllBars(self, symbol:str) -> BarCollection:
         daily:pd.DataFrame = self.getDaily(symbol)

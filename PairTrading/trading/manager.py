@@ -156,7 +156,8 @@ class TradingManager(Base, metaclass=Singleton):
                 logger.info(f"short {pair[0]} long {pair[1]} pair position opened")
                 self.tradingRecord = tradingRecord
                 executedTrades += 1
-            except Exception:
+            except Exception as e:
+                logger.warn(e)
                 continue
             
         if executedTrades > 0:
