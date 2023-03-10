@@ -56,7 +56,8 @@ class PairCreator(Base, metaclass=Singleton):
             "momentum": pairCandidates, 
             "mean": Series(sc.mean_[0], index=pairCandidates.index)}, axis=1)  
         
-        return pairsDF.loc[pairsDF["momentum_zscore"] >= 1 & pairsDF["momentum_zscore"] < 2].sort_values(by=["momentum_zscore"], ascending=False)
+        return pairsDF.loc[pairsDF["momentum_zscore"] >= 1].\
+            loc[pairsDF["momentum_zscore"] < 2].sort_values(by=["momentum_zscore"], ascending=False)
                       
         
     def _formPairs(self) -> dict:
