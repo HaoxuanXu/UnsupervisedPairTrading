@@ -260,10 +260,6 @@ class FirmCharGetter(FundamentalsBase):
         marketCap:float = self.highlights["MarketCapitalization"]
         
         return dividends / marketCap
-        
-    def getIPO(self) -> float:
-        ipoDate:datetime = datetime.strptime(self.general["IPODate"], "%Y-%m-%d")
-        return 1 if (datetime.today() - ipoDate).years < 1 else 0
     
     def getRd(self) -> float:
         """
