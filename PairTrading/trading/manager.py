@@ -214,7 +214,7 @@ class TradingManager(Base, metaclass=Singleton):
                     f"{pair[0]}--{pair[1]}, profit: {round(currProfit*100, 2)}%, days: {daysElapsed}, exit_profit: {round(exitProfit*100, 2)}%"
                     )
             
-            if currProfit >= exitProfit:
+            if currProfit >= exitProfit or currProfit < -0.15:
                 res.append(pair)
 
        
