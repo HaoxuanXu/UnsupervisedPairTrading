@@ -31,12 +31,8 @@ class PairCreator(Base, metaclass=Singleton):
                 
         tmpDict:dict = {}
         for pair in viablePairs:      
-            volumeRatio = self.dataClient.getDaily(pair[0]).values.reshape(-1, 1) / \
-                self.dataClient.getDaily(pair[0]).values.reshape(-1, 1)
-            ss = StandardScaler()
-            if abs(ss.fit_transform(volumeRatio)[-1][0]) < 1:
-                tmpDict[",".join(pair)] = (pairsDF.loc[",".join(pair)]["momentum"] - pairsDF.loc[",".join(pair)]["mean"]) / \
-                    pairsDF.loc[",".join(pair)]["momentum_zscore"]
+            tmpDict[",".join(pair)] = (pairsDF.loc[",".join(pair)]["momentum"] - pairsDF.loc[",".join(pair)]["mean"]) / \
+                pairsDF.loc[",".join(pair)]["momentum_zscore"]
 
                 
         for pair in list(tmpDict.keys()):
