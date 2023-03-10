@@ -34,7 +34,7 @@ class PairCreator(Base, metaclass=Singleton):
             volumeRatio = self.dataClient.get4YearDaily(pair[0]).values.reshape(-1, 1) / \
                 self.dataClient.get4YearDaily(pair[0]).values.reshape(-1, 1)
             ss = StandardScaler()
-            if abs(ss.fit_transform(volumeRatio)[-1][0]) < 2:
+            if abs(ss.fit_transform(volumeRatio)[-1][0]) < 1:
                 tmpDict[",".join(pair)] = (pairsDF.loc[",".join(pair)]["momentum"] - pairsDF.loc[",".join(pair)]["mean"]) / \
                     pairsDF.loc[",".join(pair)]["momentum_zscore"]
 
