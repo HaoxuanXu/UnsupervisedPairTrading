@@ -16,7 +16,7 @@ def cleanClosedTrades() -> None:
     
     delNum:int = 0
     for symbol, time in closedTrades.items():
-        if (today - time).days > 31:
+        if (today - time).days > 30:
             del closedTrades[symbol]
             delNum += 1
             
