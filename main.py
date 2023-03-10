@@ -79,7 +79,7 @@ if __name__ == "__main__":
     while clock.is_open:    
         canOpen = True if (clock.next_close - clock.timestamp).total_seconds() < 300 else canOpen
         if len(manager.openedPositions) < manager.maxPositions * 2 and \
-        (clock.next_close - clock.timestamp).total_seconds() < 3600 * 0.5 and \
+        (clock.next_close - clock.timestamp).total_seconds() < 300 and \
         canOpen:
             newPairs:dict = pairCreator.getFinalPairs(trainDate)
             writeToJson(newPairs, "saveddata/pairs/pairs.json")                     
