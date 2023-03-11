@@ -77,9 +77,8 @@ if __name__ == "__main__":
     clock = manager.tradingClient.clock
     canOpen:bool = True 
     while clock.is_open:    
-        canOpen = True if (clock.next_close - clock.timestamp).total_seconds() < 300 else canOpen
         if len(manager.openedPositions) < manager.maxPositions * 2 and \
-        (clock.next_close - clock.timestamp).total_seconds() < 1800 and \
+        (clock.next_close - clock.timestamp).total_seconds() < 600 and \
         canOpen:
             newPairs:dict = pairCreator.getFinalPairs(trainDate)
             writeToJson(newPairs, "saveddata/pairs/pairs.json")                     
