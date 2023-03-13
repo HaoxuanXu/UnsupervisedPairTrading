@@ -177,6 +177,8 @@ class TradingManager(Base, metaclass=Singleton):
         
         
     def _getStopLoss(self, daysElapsed:int, originalExitProfit:float) -> float:
+        if originalExitProfit < 0:
+            return originalExitProfit
         exitProfit:float = originalExitProfit
         if 60 > daysElapsed >= 30:
             exitProfit *= (2/3)
