@@ -3,6 +3,7 @@ from PairTrading.util.write import dumpRecentlyClosed
 
 from datetime import datetime, date 
 import logging 
+import copy
 
 logger = logging.getLogger(__name__)
 
@@ -15,11 +16,12 @@ def cleanClosedTrades() -> None:
     today:date = date.today()
     
     delNum:int = 0
+    res = copy.deepcopy(closedTrades)
     for symbol, time in closedTrades.items():
         if (today - time).days > 30:
-            del closedTrades[symbol]
+            del res[symbol]
             delNum += 1
             
-    dumpRecentlyClosed(closedTrades)
+    dumpRecentlyClosed(res)
     logger.info(f"{delNum} past trading records removed")
     
